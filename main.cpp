@@ -52,7 +52,7 @@ vector<vector<char>> ask(vector<vector<char>> &board, const string& player, cons
 
     cin >> column;
     cin >> row;
-    if (column < 1 or row < 1 or column > size_x or row > size_y){
+    if (column < 1 or row < 1 or column > size_y or row > size_x){
         cout << "Ha ha nice try, you can't segfault me" << endl; // one of my last fixes, my mental health had degraded too much at this point
     }
     if (board[--row][--column] != '#'){
