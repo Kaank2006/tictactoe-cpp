@@ -4,13 +4,18 @@
 
 using namespace std;
 
-void getBoard(const vector<vector<char>>& board);
+void getBoard(const vector<vector<char>>& board, const int& size_x, const int& size_y);
 vector<vector<char>> ask(vector<vector<char>> &board, const string& player, const char& symbol);
 bool check(vector<vector<char>> board, const string& p1, const string& p2);
 
 int main() {
 
+    int size_x, size_y;
     string p1,p2;
+
+    cout << "Enter the size of the board in the following format: \"column row\"" << endl;
+    cin >> size_x;
+    cin >> size_y;
 
     cout << "Player 1, enter your name:" << endl;
     cin >> p1;
@@ -18,17 +23,16 @@ int main() {
     cout << "Player 2, enter your name:" << endl;
     cin >> p2;
 
-    vector<vector<char>> board{ // isn't there a better way to do this? i forgot
-            {'#', '#', '#'},
-            {'#', '#', '#'},
-            {'#', '#', '#'}
-    };
+    vector<vector<char>> board(size_y, vector<char>(size_x, '#'));
 
     cout << "Current board:" << endl;
-    getBoard(board);
+    getBoard(board, size_y, size_x);
 
     do {
         ask(board, p1, 'X');
+
+        cout << "Current board:" << endl;
+        getBoard(board, size_y, size_x);
 
 
         if(check(board, p1, p2)){
@@ -36,6 +40,9 @@ int main() {
         }
 
         ask(board, p2, 'O');
+
+        cout << "Current board:" << endl;
+        getBoard(board, size_y, size_x);
 
     } while (!check(board, p1, p2));
 
@@ -58,9 +65,6 @@ vector<vector<char>> ask(vector<vector<char>> &board, const string& player, cons
     }
 
     board[row][column] = symbol; // line 57 already decreases it. Optimisation 1000 /s
-
-    cout << "Current board:" << endl;
-    getBoard(board);
 
     return board;
 }
@@ -89,9 +93,9 @@ bool check(vector<vector<char>> board, const string& p1, const string& p2) {
     return false;
 }
 
-void getBoard(const vector<vector<char>>& board) { // prints the whole board
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
+void getBoard(const vector<vector<char>>& board, const int& size_y, const int& size_x) { // prints the whole board
+    for (int i = 0; i < size_y; ++i) {
+        for (int j = 0; j < size_x; ++j) {
             cout << board[i][j] << " ";
         }
         cout << endl;
