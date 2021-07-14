@@ -5,8 +5,10 @@
 using namespace std;
 
 void getBoard(const vector<vector<char>>& board, const int& size_y, const int& size_x);
-vector<vector<char>> ask(vector<vector<char>> &board, const string& player, const char& symbol, const int& size_x, const int& size_y);
-bool check(vector<vector<char>> board, const string& p1, const string& p2);
+vector<vector<char>> ask(vector<vector<char>> &board, const string& player, const char& symbol, const int& size_x, const int& size_y, int& row, int& column);
+bool
+check(const vector<vector<char>> &board, const string &p1, const string &p2, int row, int column, const int &size_x,
+      const int &size_y);
 
 int main() {
 
@@ -16,6 +18,9 @@ int main() {
     cout << "Enter the size of the board in the following format: \"column row\"" << endl;
     cin >> size_x;
     cin >> size_y;
+
+    size_x--;
+    size_y--;
 
     cout << "Player 1, enter your name:" << endl;
     cin >> p1;
@@ -28,26 +33,26 @@ int main() {
     cout << "Current board:" << endl;
     getBoard(board, size_y, size_x);
 
+    int row, column;
+
     do {
 
-        ask(board, p1, 'X', size_y, size_x);
+        ask(board, p1, 'X', size_y, size_x, row, column);
         getBoard(board, size_y, size_x);
 
-        if(check(board, p1, p2)){
+        if(check(board, p1, p2, row, column, size_x, size_y)){
             return EXIT_SUCCESS;
         }
 
-        ask(board, p2, 'O', size_y, size_x);
+        ask(board, p2, 'O', size_y, size_x, row, column);
         getBoard(board, size_y, size_x);
 
-    } while (!check(board, p1, p2));
+    } while (!check(board, p1, p2, row, column, size_x, size_y));
 
     return EXIT_SUCCESS;
 }
 
-vector<vector<char>> ask(vector<vector<char>> &board, const string& player, const char& symbol, const int& size_x, const int& size_y) {
-    int row, column;
-
+vector<vector<char>> ask(vector<vector<char>> &board, const string& player, const char& symbol, const int& size_x, const int& size_y, int& row, int& column) {
     cout << player << " (x), Where would you like to place? (Enter column and row):" << endl;
 
     cin >> column;
@@ -57,7 +62,7 @@ vector<vector<char>> ask(vector<vector<char>> &board, const string& player, cons
     }
     if (board[--row][--column] != '#'){
         cout << player << " tried to overwrite a sector.";
-        ask(board, player, symbol, size_y, size_x);
+        ask(board, player, symbol, size_y, size_x, row, column);
     }
 
     board[row][column] = symbol; // line 57 already decreases it. Optimisation 1000 /s
@@ -66,28 +71,27 @@ vector<vector<char>> ask(vector<vector<char>> &board, const string& player, cons
     return board;
 }
 
-bool check(vector<vector<char>> board, const string& p1, const string& p2) {
-    for (int i = 0; i < 3; ++i) {
-        if ((board[i][0] == 'x' && board[i][1] == 'x' && board[i][2] == 'x') || (board[0][i] == 'x' && board[1][i] == 'x' && board[2][i] == 'x')) {
-            cout << p1 << " wins!" << endl;
-            return true;
-        }
-
-        else if ((board[i][0] == 'o' && board[i][1] == 'o' && board[i][2] == 'o') || (board[0][i] == 'o' && board[1][i] == 'o' && board[2][i] == 'o')) {
-            cout << p2 << " wins!" << endl;
-            return true;
-        }
+bool check(const vector<vector<char>> &board, const string &p1, const string &p2, int row, int column, const int &size_x, const int &size_y) {
+        // segfault catcher
+    if ((row > size_y-3) && (column > size_x-3)){
+        // be warned about it
     }
-    if ((board[0][0] == 'x' && board[1][1] == 'x' && board[2][2] == 'x') || (board[2][0] == 'x' && board[1][1] == 'x' && board[0][2] == 'x')){
-        cout << p1 << " wins!" << endl;
-        return true;
-    }
-    else if ((board[0][0] == 'o' && board[1][1] == 'o' && board[2][2] == 'o') || (board[2][0] == 'o' && board[1][1] == 'o' && board[0][2] == 'o')){
-        cout << p2 << " wins!" << endl;
-        return true;
-    } // there should be a shorter way to do this, the line's so long it looks like java
 
-    return false;
+    if (row > size_y-3){
+
+    }
+    if (column > size_x-3){
+
+    }
+
+    // normal check
+    int tempvar = 0;
+    if(
+
+            board[row][column]
+            ){ //
+
+    }
 }
 
 void getBoard(const vector<vector<char>>& board, const int& size_y, const int& size_x) { // prints the whole board
